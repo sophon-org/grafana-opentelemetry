@@ -6,11 +6,8 @@ receivers:
       http:
         cors:
           allowed_origins:
-            - https://*.slatecast.dev
-            - https://*.slatecast.io
-            - https://*.slatecast.co
-            - https://*.ginkgoo.dev
-            - https://*.jasper.dev
+            - https://*.sophon.xyz
+            - https://*.sophon.com
           allowed_headers: 
             - "*"
           max_age: 7200      
@@ -37,16 +34,6 @@ exporters:
     tls:
       insecure: true
 
-  # These two service have the same function with Tempo, no need to use all three.
-  # zipkin:
-  #   endpoint: "${env:RAILWAY_ZINPKIN_ENDPOINT}" # http://zipkin.railway.internal:9411/api/v2/spans
-  #   format: proto
-
-  # otlp/jaeger:
-  #   endpoint: "${env:RAILWAY_JAEGER_ENDPOINT}" # jaeger.railway.internal:4317
-  #   tls:
-  #     insecure: true
-
 processors:
   batch:
 
@@ -64,14 +51,13 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp/tempo]
-      # exporters: [zipkin, otlp/jaeger, otlp/tempo]
-      # exporters: [zipkin, otlp/jaeger, otlp/tempo, debug]
+      
     metrics:
       receivers: [otlp]
       processors: [batch]
       exporters: [prometheus]
-      # exporters: [prometheusremotewrite, prometheus, debug]
+
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: [memory_limiter, attributes, batch]
       exporters: [otlphttp/loki]
