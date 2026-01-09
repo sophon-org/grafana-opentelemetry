@@ -47,19 +47,12 @@ processors:
     limit_percentage: 80
     spike_limit_percentage: 25
 
-  transform/loki_trace_span:
+  transform/add_traceid:
     error_mode: ignore
     log_statements:
       - context: log
         statements:
-          - set(attributes["trace_id"], trace_id)
-          - set(attributes["span_id"], span_id)
-
-  attributes/loki_labels:
-    actions:
-      - action: insert
-        key: loki.attribute.labels
-        value: trace_id,span_id
+          - set(attributes["TraceId"], trace_id) where trace_id != nil
 
   batch:
     send_batch_size: 1024
@@ -80,5 +73,5 @@ service:
 
     logs:
       receivers: [otlp]
-      processors: [memory_limiter, transform/loki_trace_span, attributes/loki_labels, batch]
+      processors: [memory_limiter, transform/add_traceid, batch]
       exporters: [otlphttp/loki]
