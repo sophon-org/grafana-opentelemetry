@@ -25,10 +25,11 @@ datasources:
     isDefault: true
     jsonData:
       derivedFields:
-        - name: trace_id
-          matcherRegex: 'trace_id=([0-9a-fA-F]{16,32})'
-          datasourceUid: grafana_tempo
-          url: '$${__value.raw}'
+      - datasourceName: Grafana_Tempo
+        datasourceUid: grafana_tempo
+        matcherRegex: trace_id=(\w+)
+        name: traceID
+        url: $${__value.raw}
 
 
   ##############

@@ -47,13 +47,6 @@ processors:
     limit_percentage: 80
     spike_limit_percentage: 25
 
-  transform/add_traceid:
-    error_mode: ignore
-    log_statements:
-      - context: log
-        statements:
-          - set(attributes["TraceId"], trace_id) where trace_id != nil
-
   batch:
     send_batch_size: 1024
     timeout: 1s
@@ -73,5 +66,5 @@ service:
 
     logs:
       receivers: [otlp]
-      processors: [memory_limiter, transform/add_traceid, batch]
+      processors: [memory_limiter, batch]
       exporters: [otlphttp/loki]
