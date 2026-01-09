@@ -35,7 +35,7 @@ datasources:
       - datasourceName: Grafana_Tempo
         datasourceUid: grafana_tempo
         name: SpanID
-        url: "$${__value.raw}"
+        url: "{span:id=\"$${__value.raw}\"}"
         matcherType: label
         matcherRegex: "span_id"
         urlDisplayLabel: "View Span"
