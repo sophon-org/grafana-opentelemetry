@@ -27,9 +27,11 @@ datasources:
       derivedFields:
       - datasourceName: Grafana_Tempo
         datasourceUid: grafana_tempo
-        matcherRegex: trace_id=(\w+)
-        name: traceID
+        name: TraceID
         url: $${__value.raw}
+        matcherType: label
+        matcherRegex: trace_id
+        urlDisplayLabel: View Trace
 
 
   ##############
