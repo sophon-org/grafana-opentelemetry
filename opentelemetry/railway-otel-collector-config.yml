@@ -34,15 +34,30 @@ exporters:
     tls:
       insecure: true
 
-processors:
-  batch:
-
 extensions:
   health_check:
   pprof:
     endpoint: :1888
   zpages:
     endpoint: :55679
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 25
+
+  transform/add_traceid_to_body:
+    error_mode: ignore
+    log_statements:
+      - context: log
+        statements:
+          - set(attributes["trace_id"], trace_id) where trace_id != nil
+          - set(body, Concat([body, " trace_id=", trace_id], "")) where IsString(body) and trace_id != nil
+
+  batch:
+    send_batch_size: 1024
+    timeout: 1s
 
 service:
   extensions: [pprof, zpages, health_check]
@@ -59,5 +74,5 @@ service:
 
     logs:
       receivers: [otlp]
-      processors: [memory_limiter, attributes, batch]
+      processors: [memory_limiter, transform/add_traceid_to_body, batch]
       exporters: [otlphttp/loki]
