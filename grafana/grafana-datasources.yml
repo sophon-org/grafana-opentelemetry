@@ -23,15 +23,16 @@ datasources:
     basicAuthUser:
     withCredentials:
     isDefault: true
+    editable: true
     jsonData:
       derivedFields:
       - datasourceName: Grafana_Tempo
         datasourceUid: grafana_tempo
         name: TraceID
-        url: $${__value.raw}
+        url: "$${__value.raw}"
         matcherType: label
-        matcherRegex: trace_id
-        urlDisplayLabel: View Trace
+        matcherRegex: "trace_id"
+        urlDisplayLabel: "View Trace"
 
 
   ##############
