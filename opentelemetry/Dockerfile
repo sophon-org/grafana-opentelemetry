@@ -1,4 +1,4 @@
-FROM otel/opentelemetry-collector-contrib:0.123.0
+FROM otel/opentelemetry-collector-contrib:0.143.0
 
 # COPY grafana-collector-config.yaml /etc/otelcol-contrib/config.yaml
 COPY railway-otel-collector-config.yml /etc/otelcol-contrib/config.yaml
